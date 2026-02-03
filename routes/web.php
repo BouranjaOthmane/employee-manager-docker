@@ -28,4 +28,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class);
+    Route::resource('positions', \App\Http\Controllers\Admin\PositionController::class);
+    Route::resource('vacations', \App\Http\Controllers\Admin\VacationController::class);
+    Route::resource('salaries', \App\Http\Controllers\Admin\SalaryController::class);
+    Route::resource('holidays', \App\Http\Controllers\Admin\HolidayController::class);
+
+    Route::post('employees/{employee}/documents', [\App\Http\Controllers\Admin\EmployeeDocumentController::class, 'store'])
+        ->name('employees.documents.store');
+    Route::get('documents/{document}/download', [\App\Http\Controllers\Admin\EmployeeDocumentController::class, 'download'])
+        ->name('documents.download');
+    Route::delete('documents/{document}', [\App\Http\Controllers\Admin\EmployeeDocumentController::class, 'destroy'])
+        ->name('documents.destroy');
+});
+
+
 require __DIR__.'/auth.php';
