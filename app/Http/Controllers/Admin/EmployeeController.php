@@ -7,6 +7,9 @@ use App\Models\Position;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class EmployeeController extends Controller
 {
@@ -44,7 +47,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-          $positions = Position::query()
+        $positions = Position::query()
             ->orderBy('title')
             ->get(['id', 'title']);
 
@@ -56,7 +59,7 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
-         $employee = Employee::create($request->validated());
+        $employee = Employee::create($request->validated());
 
         return redirect()
             ->route('admin.employees.show', $employee)
@@ -66,32 +69,43 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Employee $employee): View
     {
-        //
+        $employee->load([
+            'position:id,title',
+            'documents' => fn ($q) => $q->latest(),
+            'vacations' => fn ($q) => $q->latest(),
+            'salaries'  => fn ($q) => $q->orderByDesc('month'),
+        ]);
+
+        return view('admin.employees.show', compact('employee'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+
+    public function edit(Employee $employee): View
     {
-        //
+        $positions = Position::query()->orderBy('title')->get(['id', 'title']);
+        return view('admin.employees.edit', compact('employee', 'positions'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateEmployeeRequest $request, Employee $employee): RedirectResponse
     {
-        //
+        $employee->update($request->validated());
+
+        return redirect()
+            ->route('admin.employees.show', $employee)
+            ->with('success', 'Employee updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Employee $employee): RedirectResponse
     {
-        //
+        $employee->delete();
+
+        return redirect()
+            ->route('admin.employees.index')
+            ->with('success', 'Employee deleted successfully.');
     }
 }

@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Admin\EmployeeSalaryController;
+use App\Http\Controllers\Admin\EmployeeVacationController;
+use App\Http\Controllers\Admin\EmployeeCalendarController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -41,7 +44,18 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         ->name('documents.download');
     Route::delete('documents/{document}', [\App\Http\Controllers\Admin\EmployeeDocumentController::class, 'destroy'])
         ->name('documents.destroy');
+
+
+
+    Route::post('employees/{employee}/vacations', [EmployeeVacationController::class, 'store'])
+        ->name('employees.vacations.store');
+
+    Route::post('employees/{employee}/salaries', [EmployeeSalaryController::class, 'store'])
+        ->name('employees.salaries.store');
+
+    Route::get('employees/{employee}/calendar', [EmployeeCalendarController::class, 'show'])
+        ->name('employees.calendar.show');
 });
 
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
