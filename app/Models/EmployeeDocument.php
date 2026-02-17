@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class EmployeeDocument extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['employee_id', 'type', 'title', 'file_path'];
+
 }
