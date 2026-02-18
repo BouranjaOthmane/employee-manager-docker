@@ -70,10 +70,6 @@
                         <span class="badge badge-info p-2">Docs: {{ $employee->documents?->count() ?? 0 }}</span>
                         <span class="badge badge-warning p-2">Vacations: {{ $employee->vacations?->count() ?? 0 }}</span>
                         <span class="badge badge-success p-2">Salaries: {{ $employee->salaries?->count() ?? 0 }}</span>
-                        <a href="{{ route('admin.employees.calendar.show', $employee) }}" class="btn btn-info">
-                            <i class="fas fa-calendar-alt mr-1"></i> Calendar
-                        </a>
-
                     </div>
                 </div>
 
@@ -121,6 +117,12 @@
                                 <i class="fas fa-money-bill-wave mr-1"></i> Salaries
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.employees.calendar.show', $employee) }}" class="nav-link">
+                                <i class="fas fa-calendar-alt mr-1"></i> Calendar
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
 
