@@ -1,8 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\EmployeeCalendarController;
+use App\Http\Controllers\Admin\EmployeeCalendarDayController;
+use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\EmployeeSalaryController;
 use App\Http\Controllers\Admin\EmployeeVacationController;
-use App\Http\Controllers\Admin\EmployeeCalendarController;
+use App\Http\Controllers\Admin\SalaryController;
+use App\Http\Controllers\Admin\VacationApprovalController;
+use App\Http\Controllers\Admin\VacationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +43,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('salaries', \App\Http\Controllers\Admin\SalaryController::class);
     Route::resource('holidays', \App\Http\Controllers\Admin\HolidayController::class);
 
+
     Route::post('employees/{employee}/documents', [\App\Http\Controllers\Admin\EmployeeDocumentController::class, 'store'])
         ->name('employees.documents.store');
     Route::get('documents/{document}/download', [\App\Http\Controllers\Admin\EmployeeDocumentController::class, 'download'])
@@ -55,6 +61,30 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::get('employees/{employee}/calendar', [EmployeeCalendarController::class, 'show'])
         ->name('employees.calendar.show');
+
+    Route::get('employees/{employee}/calendar/day', [EmployeeCalendarDayController::class, 'show'])
+        ->name('employees.calendar.day.show');
+
+    Route::post('employees/{employee}/calendar/day', [EmployeeCalendarDayController::class, 'storeOrUpdate'])
+        ->name('employees.calendar.day.store');
+
+    Route::delete('employees/{employee}/calendar/day', [EmployeeCalendarDayController::class, 'destroy'])
+        ->name('employees.calendar.day.destroy');
+
+
+    Route::get('vacations', [VacationController::class, 'index'])
+        ->name('vacations.index');
+
+    // Approve / Reject (protected)
+    Route::patch('vacations/{vacation}/approve', [VacationApprovalController::class, 'approve'])
+        ->name('vacations.approve');
+        // ->middleware('role:admin|hr');
+
+    Route::patch('vacations/{vacation}/reject', [VacationApprovalController::class, 'reject'])
+        ->name('vacations.reject');
+        // ->middleware('role:admin|hr');
+
+    Route::get('salaries', [SalaryController::class, 'index'])->name('salaries.index');
 });
 
 
