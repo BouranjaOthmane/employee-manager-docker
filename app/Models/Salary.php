@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class Salary extends Model
 {
     use HasFactory;
@@ -14,4 +16,8 @@ class Salary extends Model
     protected $casts = [
         'month' => 'date',
     ];
+      public function employee(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Employee::class);
+    }
 }

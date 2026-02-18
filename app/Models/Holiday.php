@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Holiday extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['date', 'name', 'reason'];
+
+    protected $casts = [
+        'date' => 'date',
+    ];
 }
