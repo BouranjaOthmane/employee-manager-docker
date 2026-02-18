@@ -3,63 +3,72 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Holiday;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HolidayController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request): View
     {
-        
+        $q = trim($request->string('q')->toString());
+
+        $holidays = Holiday::query()
+            ->when($q !== '', function ($query) use ($q) {
+                $query->where('name', 'like', "%{$q}%")
+                      ->orWhere('reason', 'like', "%{$q}%")
+                      ->orWhere('date', 'like', "%{$q}%");
+            })
+            ->orderByDesc('date')
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.holidays.index', compact('holidays'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function create(): View
     {
-        
+        return view('admin.holidays.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        
+        $data = $request->validate([
+            'date'   => ['required', 'date'],
+            'name'   => ['required', 'string', 'max:190'],
+            'reason' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        Holiday::create($data);
+
+        return redirect()->route('admin.holidays.index')
+            ->with('success', 'Holiday created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Holiday $holiday): View
     {
-        
+        return view('admin.holidays.edit', compact('holiday'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Holiday $holiday)
     {
-        
+        $data = $request->validate([
+            'date'   => ['required', 'date'],
+            'name'   => ['required', 'string', 'max:190'],
+            'reason' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $holiday->update($data);
+
+        return redirect()->route('admin.holidays.index')
+            ->with('success', 'Holiday updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Holiday $holiday)
     {
-        
-    }
+        $holiday->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        
+        return redirect()->route('admin.holidays.index')
+            ->with('success', 'Holiday deleted successfully.');
     }
 }

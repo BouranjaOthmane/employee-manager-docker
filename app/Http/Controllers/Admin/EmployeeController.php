@@ -76,6 +76,7 @@ class EmployeeController extends Controller
             'documents' => fn ($q) => $q->latest(),
             'vacations' => fn ($q) => $q->latest(),
             'salaries'  => fn ($q) => $q->orderByDesc('month'),
+            'vacations' => fn ($q) => $q->latest()->with('approvedBy:id,name'),
         ]);
 
         return view('admin.employees.show', compact('employee'));

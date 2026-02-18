@@ -9,6 +9,8 @@ use App\Models\Vacation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\EmployeeDayOverride;
+
 
 class EmployeeCalendarController extends Controller
 {
@@ -20,25 +22,33 @@ class EmployeeCalendarController extends Controller
             ? Carbon::createFromFormat('Y-m', $month)->startOfMonth()
             : now()->startOfMonth();
 
+
         $start = $current->copy()->startOfMonth();
         $end   = $current->copy()->endOfMonth();
+
+        $overrides = EmployeeDayOverride::query()
+            ->where('employee_id', $employee->id)
+            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
+            ->get()
+            ->keyBy(fn($o) => $o->date->toDateString());
+
 
         // Holidays in that month (company days off)
         $holidays = Holiday::query()
             ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
             ->get()
-            ->keyBy(fn ($h) => Carbon::parse($h->date)->toDateString()); // "YYYY-MM-DD"
+            ->keyBy(fn($h) => Carbon::parse($h->date)->toDateString()); // "YYYY-MM-DD"
 
         // Vacations overlapping the month (for this employee)
         $vacations = Vacation::query()
             ->where('employee_id', $employee->id)
             ->where(function ($q) use ($start, $end) {
                 $q->whereBetween('start_date', [$start, $end])
-                  ->orWhereBetween('end_date', [$start, $end])
-                  ->orWhere(function ($qq) use ($start, $end) {
-                      $qq->where('start_date', '<=', $start)
-                         ->where('end_date', '>=', $end);
-                  });
+                    ->orWhereBetween('end_date', [$start, $end])
+                    ->orWhere(function ($qq) use ($start, $end) {
+                        $qq->where('start_date', '<=', $start)
+                            ->where('end_date', '>=', $end);
+                    });
             })
             ->get();
 
@@ -86,6 +96,18 @@ class EmployeeCalendarController extends Controller
                     'type' => 'off',
                     'label' => $holiday ? $holiday->name : 'OFF',
                     'tooltip' => $holiday ? ($holiday->reason ?? $holiday->name) : 'Weekend',
+                ];
+                continue;
+            }
+
+            $override = $overrides->get($key);
+            if ($override) {
+                $days[] = [
+                    'date' => $date->copy(),
+                    'in_month' => $isCurrentMonth,
+                    'type' => $override->status, // working/off/vacation
+                    'label' => strtoupper($override->status),
+                    'tooltip' => $override->reason ? ('Manual • ' . $override->reason) : 'Manual override',
                 ];
                 continue;
             }

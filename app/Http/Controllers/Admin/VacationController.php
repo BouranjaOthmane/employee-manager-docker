@@ -3,63 +3,40 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
+use App\Models\Vacation;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class VacationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request): View
     {
-        //
-    }
+        $status = $request->string('status')->toString();
+        $type   = $request->string('type')->toString();
+        $employeeId = $request->integer('employee_id') ?: null;
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        $dateFrom = $request->string('from')->toString(); // YYYY-MM-DD
+        $dateTo   = $request->string('to')->toString();   // YYYY-MM-DD
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $employees = Employee::query()
+            ->orderBy('first_name')
+            ->get(['id', 'first_name', 'last_name']);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $vacations = Vacation::query()
+            ->with([
+                'employee:id,first_name,last_name',
+                'approvedBy:id,name',
+            ])
+            ->when($employeeId, fn($q) => $q->where('employee_id', $employeeId))
+            ->when(in_array($status, ['pending','approved','rejected'], true), fn($q) => $q->where('status', $status))
+            ->when(in_array($type, ['paid','unpaid','sick','other'], true), fn($q) => $q->where('type', $type))
+            ->when($dateFrom !== '', fn($q) => $q->whereDate('start_date', '>=', $dateFrom))
+            ->when($dateTo !== '', fn($q) => $q->whereDate('end_date', '<=', $dateTo))
+            ->orderByDesc('start_date')
+            ->paginate(15)
+            ->withQueryString();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return view('admin.vacations.index', compact('vacations', 'employees'));
     }
 }
