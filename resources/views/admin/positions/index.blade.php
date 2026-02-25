@@ -4,10 +4,10 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="mb-0">Positions</h1>
+        <h1 class="mb-0">Postes</h1>
 
         <a href="{{ route('admin.positions.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus mr-1"></i> Add Position
+            <i class="fas fa-plus mr-1"></i> Ajouter un poste
         </a>
     </div>
 @endsection
@@ -21,7 +21,7 @@
 
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-search mr-1"></i> Search</h3>
+            <h3 class="card-title"><i class="fas fa-search mr-1"></i> Recherche</h3>
         </div>
 
         <div class="card-body">
@@ -29,11 +29,8 @@
                 <div class="row">
                     <div class="col-md-10">
                         <div class="input-group">
-                            <input type="text"
-                                   name="q"
-                                   class="form-control"
-                                   placeholder="Search by title..."
-                                   value="{{ request('q') }}">
+                            <input type="text" name="q" class="form-control"
+                                placeholder="Rechercher par intitulé..." value="{{ request('q') }}">
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search"></i>
@@ -44,7 +41,7 @@
 
                     <div class="col-md-2 mt-2 mt-md-0">
                         <a href="{{ route('admin.positions.index') }}" class="btn btn-outline-secondary btn-block">
-                            Reset
+                            Réinitialiser
                         </a>
                     </div>
                 </div>
@@ -55,11 +52,11 @@
     <div class="card card-outline card-secondary">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fas fa-briefcase mr-1"></i> Positions List
+                <i class="fas fa-briefcase mr-1"></i> Liste des postes
             </h3>
 
             <div class="card-tools">
-                <span class="badge badge-info p-2">Total: {{ $positions->total() }}</span>
+                <span class="badge badge-info p-2">Total : {{ $positions->total() }}</span>
             </div>
         </div>
 
@@ -69,9 +66,9 @@
                     <thead class="thead-light">
                         <tr>
                             <th style="width: 90px;">#</th>
-                            <th>Title</th>
+                            <th>Intitulé</th>
                             <th>Description</th>
-                            <th style="width: 140px;">Employees</th>
+                            <th style="width: 140px;">Employés</th>
                             <th class="text-right" style="width: 170px;">Actions</th>
                         </tr>
                     </thead>
@@ -90,14 +87,12 @@
                                 </td>
                                 <td class="text-right">
                                     <a href="{{ route('admin.positions.edit', $position) }}"
-                                       class="btn btn-sm btn-outline-warning">
+                                        class="btn btn-sm btn-outline-warning">
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <form action="{{ route('admin.positions.destroy', $position) }}"
-                                          method="POST"
-                                          class="d-inline"
-                                          onsubmit="return confirm('Delete this position?')">
+                                    <form action="{{ route('admin.positions.destroy', $position) }}" method="POST"
+                                        class="d-inline" onsubmit="return confirm('Supprimer ce poste ?')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="btn btn-sm btn-outline-danger">
@@ -109,7 +104,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="text-center text-muted py-4">
-                                    No positions found.
+                                    Aucun poste trouvé.
                                 </td>
                             </tr>
                         @endforelse
@@ -118,7 +113,7 @@
             </div>
         </div>
 
-        @if($positions->hasPages())
+        @if ($positions->hasPages())
             <div class="card-footer">
                 {{ $positions->withQueryString()->links() }}
             </div>

@@ -4,9 +4,9 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="mb-0">Edit Holiday</h1>
+        <h1 class="mb-0">Modifier le jour férié</h1>
         <a href="{{ route('admin.holidays.index') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left mr-1"></i> Back
+            <i class="fas fa-arrow-left mr-1"></i> Retour
         </a>
     </div>
 @endsection
@@ -14,7 +14,7 @@
 @section('content')
     <div class="card card-outline card-warning">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-edit mr-1"></i> Update Holiday</h3>
+            <h3 class="card-title"><i class="fas fa-edit mr-1"></i> Mettre à jour le jour férié</h3>
         </div>
 
         <form method="POST" action="{{ route('admin.holidays.update', $holiday) }}">
@@ -25,7 +25,7 @@
             </div>
             <div class="card-footer d-flex justify-content-between">
                 <a href="{{ route('admin.holidays.index') }}" class="btn btn-outline-secondary">Cancel</a>
-                <button class="btn btn-warning"><i class="fas fa-save mr-1"></i> Save changes</button>
+                <button class="btn btn-warning"><i class="fas fa-save mr-1"></i> Enregistrer les modifications</button>
             </div>
         </form>
     </div>

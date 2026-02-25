@@ -15,7 +15,7 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-plus mr-1"></i> New Position</h3>
+            <h3 class="card-title"><i class="fas fa-plus mr-1"></i> Nouveau poste</h3>
         </div>
 
         <form method="POST" action="{{ route('admin.positions.store') }}">
@@ -27,10 +27,10 @@
 
             <div class="card-footer d-flex justify-content-between">
                 <a href="{{ route('admin.positions.index') }}" class="btn btn-outline-secondary">
-                    Cancel
+                    Annuler
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save mr-1"></i> Save
+                    <i class="fas fa-save mr-1"></i> Enregistrer
                 </button>
             </div>
         </form>

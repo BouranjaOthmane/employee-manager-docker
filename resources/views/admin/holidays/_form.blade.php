@@ -9,7 +9,7 @@
 </div>
 
 <div class="form-group">
-    <label>Name <span class="text-danger">*</span></label>
+    <label>Nom <span class="text-danger">*</span></label>
     <input type="text"
            name="name"
            class="form-control @error('name') is-invalid @enderror"
@@ -20,7 +20,7 @@
 </div>
 
 <div class="form-group">
-    <label>Reason</label>
+    <label>Motif</label>
     <input type="text"
            name="reason"
            class="form-control @error('reason') is-invalid @enderror"
