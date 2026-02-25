@@ -321,31 +321,31 @@ return [
             'can' => 'manage-blog',
         ],
         [
-            'text'  => 'Employees',
+            'text'  => 'Employés',
             'route' => 'admin.employees.index',
             'icon'  => 'fas fa-users',
         ],
 
         [
-            'text'  => 'Positions',
+            'text'  => 'Postes',
             'route' => 'admin.positions.index',
             'icon'  => 'fas fa-briefcase',
         ],
 
         [
-            'text'  => 'Vacations',
+            'text'  => 'Congés',
             'route' => 'admin.vacations.index',
             'icon'  => 'fas fa-plane-departure',
         ],
 
         [
-            'text'  => 'Salaries',
+            'text'  => 'Salaires',
             'route' => 'admin.salaries.index',
             'icon'  => 'fas fa-money-bill-wave',
         ],
 
         [
-            'text'  => 'Holidays',
+            'text'  => 'Jours fériés',
             'route' => 'admin.holidays.index',
             'icon'  => 'fas fa-calendar-day',
         ],
