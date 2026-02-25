@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
-    'logo_img_xl' => null,
-    'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Admin Logo',
+    'logo' => 'VITRAGESTION',
+    // 'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    // 'logo_img_class' => 'brand-image img-circle elevation-3',
+    // 'logo_img_xl' => null,
+    // 'logo_img_xl_class' => 'brand-image-xs',
+    // 'logo_img_alt' => 'Admin Logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            // 'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -113,7 +113,7 @@ return [
         'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            // 'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -300,56 +300,56 @@ return [
 
     'menu' => [
         // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
+        // [
+        //     'type' => 'navbar-search',
+        //     'text' => 'search',
+        //     'topnav_right' => false,
+        // ],
         [
             'type' => 'fullscreen-widget',
-            'topnav_right' => true,
+            'topnav_right' => false,
         ],
 
         // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
+        // [
+        //     'type' => 'sidebar-menu-search',
+        //     'text' => 'search',
+        // ],
         [
             'text' => 'blog',
             'url' => 'admin/blog',
             'can' => 'manage-blog',
         ],
         [
-            'text' => 'Employees',
-            'url' => 'admin/employees',
-            'icon' => 'far fa-fw fa-file',
-            'label_color' => 'success',
+            'text'  => 'Employees',
+            'route' => 'admin.employees.index',
+            'icon'  => 'fas fa-users',
         ],
+
         [
-            'text' => 'Positions',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label_color' => 'success',
+            'text'  => 'Positions',
+            'route' => 'admin.positions.index',
+            'icon'  => 'fas fa-briefcase',
         ],
-          [
-            'text' => 'Vacations',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label_color' => 'success',
+
+        [
+            'text'  => 'Vacations',
+            'route' => 'admin.vacations.index',
+            'icon'  => 'fas fa-plane-departure',
         ],
-          [
-            'text' => 'Salaries',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label_color' => 'success',
+
+        [
+            'text'  => 'Salaries',
+            'route' => 'admin.salaries.index',
+            'icon'  => 'fas fa-money-bill-wave',
         ],
-          [
-            'text' => 'Holidays',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label_color' => 'success',
+
+        [
+            'text'  => 'Holidays',
+            'route' => 'admin.holidays.index',
+            'icon'  => 'fas fa-calendar-day',
         ],
+
     ],
 
     /*

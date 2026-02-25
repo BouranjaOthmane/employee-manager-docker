@@ -52,6 +52,8 @@ class EmployeeCalendarController extends Controller
             })
             ->get();
 
+        $hireDate = $employee->hire_date ? Carbon::parse($employee->hire_date)->startOfDay() : null;
+
         // Build a map date => vacation
         $vacMap = [];
         foreach ($vacations as $vac) {
@@ -68,38 +70,25 @@ class EmployeeCalendarController extends Controller
         $gridEnd   = $end->copy()->endOfWeek(Carbon::SUNDAY);
 
         $days = [];
+        $days = [];
+
         for ($date = $gridStart->copy(); $date->lte($gridEnd); $date->addDay()) {
             $key = $date->toDateString();
-
             $isCurrentMonth = $date->month === $start->month;
 
-            // 1) Vacation overrides everything (yellow)
-            if (isset($vacMap[$key])) {
-                $vac = $vacMap[$key];
+            // 0) Before hire_date -> EMPTY
+            if ($hireDate && $date->lt($hireDate)) {
                 $days[] = [
                     'date' => $date->copy(),
                     'in_month' => $isCurrentMonth,
-                    'type' => 'vacation',
-                    'label' => strtoupper($vac->status), // pending/approved/rejected
-                    'tooltip' => ($vac->type ?? 'vacation') . ' • ' . ($vac->reason ?? ''),
+                    'type' => 'empty',
+                    'label' => '',
+                    'tooltip' => 'Not employed yet',
                 ];
                 continue;
             }
 
-            // 2) Holidays/weekends are off (red)
-            $isWeekend = $date->isWeekend(); // Sat/Sun
-            if ($isWeekend || $holidays->has($key)) {
-                $holiday = $holidays->get($key);
-                $days[] = [
-                    'date' => $date->copy(),
-                    'in_month' => $isCurrentMonth,
-                    'type' => 'off',
-                    'label' => $holiday ? $holiday->name : 'OFF',
-                    'tooltip' => $holiday ? ($holiday->reason ?? $holiday->name) : 'Weekend',
-                ];
-                continue;
-            }
-
+            // 1) Manual override (top priority)
             $override = $overrides->get($key);
             if ($override) {
                 $days[] = [
@@ -112,12 +101,39 @@ class EmployeeCalendarController extends Controller
                 continue;
             }
 
-            // 3) Otherwise working day (green)
+            // 2) Vacation
+            if (isset($vacMap[$key])) {
+                $vac = $vacMap[$key];
+                $days[] = [
+                    'date' => $date->copy(),
+                    'in_month' => $isCurrentMonth,
+                    'type' => 'vacation',
+                    'label' => strtoupper($vac->status),
+                    'tooltip' => ($vac->type ?? 'vacation') . ' • ' . ($vac->reason ?? ''),
+                ];
+                continue;
+            }
+
+            // 3) Off: weekend or holiday
+            $isWeekend = $date->isWeekend();
+            if ($isWeekend || $holidays->has($key)) {
+                $holiday = $holidays->get($key);
+                $days[] = [
+                    'date' => $date->copy(),
+                    'in_month' => $isCurrentMonth,
+                    'type' => 'off',
+                    'label' => $holiday ? $holiday->name : 'repos',
+                    'tooltip' => $holiday ? ($holiday->reason ?? $holiday->name) : 'Weekend',
+                ];
+                continue;
+            }
+
+            // 4) Work
             $days[] = [
                 'date' => $date->copy(),
                 'in_month' => $isCurrentMonth,
                 'type' => 'working',
-                'label' => 'WORK',
+                'label' => 'Travail',
                 'tooltip' => 'Working day',
             ];
         }
