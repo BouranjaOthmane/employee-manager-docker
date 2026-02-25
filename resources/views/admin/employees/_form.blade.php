@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            <label>First name <span class="text-danger">*</span></label>
+            <label>Prénom <span class="text-danger">*</span></label>
             <input type="text"
                    name="first_name"
                    class="form-control @error('first_name') is-invalid @enderror"
@@ -17,7 +17,7 @@
 
     <div class="col-md-6">
         <div class="form-group">
-            <label>Last name <span class="text-danger">*</span></label>
+            <label>Nom <span class="text-danger">*</span></label>
             <input type="text"
                    name="last_name"
                    class="form-control @error('last_name') is-invalid @enderror"
@@ -42,7 +42,7 @@
 
     <div class="col-md-6">
         <div class="form-group">
-            <label>Phone</label>
+            <label>Téléphone</label>
             <input type="text"
                    name="phone"
                    class="form-control @error('phone') is-invalid @enderror"
@@ -55,9 +55,9 @@
 <div class="row">
     <div class="col-md-4">
         <div class="form-group">
-            <label>Position</label>
+            <label>Poste</label>
             <select name="position_id" class="form-control @error('position_id') is-invalid @enderror">
-                <option value="">— Select position —</option>
+                <option value="">— Sélectionner un poste —</option>
                 @foreach ($positions as $pos)
                     <option value="{{ $pos->id }}"
                         @selected(old('position_id', $employee->position_id ?? '') == $pos->id)>
@@ -71,7 +71,7 @@
 
     <div class="col-md-4">
         <div class="form-group">
-            <label>Hire date</label>
+            <label>Date d'embauche</label>
             <input type="date"
                    name="hire_date"
                    class="form-control @error('hire_date') is-invalid @enderror"
@@ -82,11 +82,11 @@
 
     <div class="col-md-4">
         <div class="form-group">
-            <label>Status <span class="text-danger">*</span></label>
+            <label>Statut <span class="text-danger">*</span></label>
             <select name="status" class="form-control @error('status') is-invalid @enderror" required>
                 @php $statusVal = old('status', $employee->status ?? 'active'); @endphp
-                <option value="active" @selected($statusVal === 'active')>Active</option>
-                <option value="inactive" @selected($statusVal === 'inactive')>Inactive</option>
+                <option value="active" @selected($statusVal === 'active')>Actif</option>
+                <option value="inactive" @selected($statusVal === 'inactive')>Inactif</option>
             </select>
             @error('status') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>

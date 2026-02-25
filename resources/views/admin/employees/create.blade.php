@@ -1,12 +1,12 @@
 @extends('adminlte::page')
 
-@section('title', 'Create Employee')
+@section('title', 'Créer un employé')
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="mb-0">Create Employee</h1>
+        <h1 class="mb-0">Créer un employé</h1>
         <a href="{{ route('admin.employees.index') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left mr-1"></i> Back
+            <i class="fas fa-arrow-left mr-1"></i> Retour
         </a>
     </div>
 @endsection
@@ -14,7 +14,7 @@
 @section('content')
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-user-plus mr-1"></i> New Employee</h3>
+            <h3 class="card-title"><i class="fas fa-user-plus mr-1"></i> Nouvel employé</h3>
         </div>
 
         <form method="POST" action="{{ route('admin.employees.store') }}">
@@ -23,7 +23,7 @@
             <div class="card-body">
                 @if ($errors->any())
                     <div class="alert alert-danger">
-                        <strong>Please fix the errors below.</strong>
+                        <strong>Veuillez corriger les erreurs ci-dessous.</strong>
                     </div>
                 @endif
 
@@ -32,10 +32,10 @@
 
             <div class="card-footer d-flex justify-content-between">
                 <a href="{{ route('admin.employees.index') }}" class="btn btn-outline-secondary">
-                    Cancel
+                    Annuler
                 </a>
                 <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save mr-1"></i> Save Employee
+                    <i class="fas fa-save mr-1"></i> Enregistrer l'employé
                 </button>
             </div>
         </form>

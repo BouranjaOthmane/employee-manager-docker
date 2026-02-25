@@ -4,9 +4,9 @@
 
 @section('content_header')
     <div class="d-flex justify-content-between align-items-center">
-        <h1 class="mb-0">Edit Employee</h1>
+        <h1 class="mb-0">Modifier l’employé</h1>
         <a href="{{ route('admin.employees.show', $employee) }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left mr-1"></i> Back
+            <i class="fas fa-arrow-left mr-1"></i> Retour
         </a>
     </div>
 @endsection
@@ -14,7 +14,7 @@
 @section('content')
     <div class="card card-outline card-warning">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-edit mr-1"></i> Update Employee</h3>
+            <h3 class="card-title"><i class="fas fa-edit mr-1"></i> Modifier l’employé</h3>
         </div>
 
         <form method="POST" action="{{ route('admin.employees.update', $employee) }}">
@@ -27,10 +27,10 @@
 
             <div class="card-footer d-flex justify-content-between">
                 <a href="{{ route('admin.employees.show', $employee) }}" class="btn btn-outline-secondary">
-                    Cancel
+                    Annuler
                 </a>
                 <button type="submit" class="btn btn-warning">
-                    <i class="fas fa-save mr-1"></i> Save Changes
+                    <i class="fas fa-save mr-1"></i> Enregistrer les modifications
                 </button>
             </div>
         </form>

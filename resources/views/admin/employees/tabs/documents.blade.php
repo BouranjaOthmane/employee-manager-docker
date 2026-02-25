@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h5 class="mb-0"><i class="fas fa-folder-open mr-1"></i> Documents</h5>
     <button class="btn btn-primary" data-toggle="collapse" data-target="#uploadDoc">
-        <i class="fas fa-upload mr-1"></i> Upload
+        <i class="fas fa-upload mr-1"></i> Télécharger
     </button>
 </div>
 
@@ -18,26 +18,26 @@
                         <label>Type</label>
                         <select name="type" class="form-control @error('type') is-invalid @enderror" required>
                             @php $typeVal = old('type'); @endphp
-                            <option value="contract" @selected($typeVal==='contract')>Contract</option>
+                            <option value="contract" @selected($typeVal==='contract')>Contrat</option>
                             <option value="cin" @selected($typeVal==='cin')>CIN</option>
                             <option value="cnss" @selected($typeVal==='cnss')>CNSS</option>
-                            <option value="diploma" @selected($typeVal==='diploma')>Diploma</option>
-                            <option value="other" @selected($typeVal==='other')>Other</option>
+                            <option value="diploma" @selected($typeVal==='diploma')>Diplôme</option>
+                            <option value="other" @selected($typeVal==='other')>Autre</option>
                         </select>
                         @error('type') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label>Title (optional)</label>
+                        <label>Titre (optionnel)</label>
                         <input type="text" name="title"
                                class="form-control @error('title') is-invalid @enderror"
                                value="{{ old('title') }}"
-                               placeholder="e.g. Work contract 2026">
+                               placeholder="ex : Contrat de travail 2026">
                         @error('title') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label>File (PDF/JPG/PNG)</label>
+                        <label>Fichier (PDF/JPG/PNG)</label>
                         <input type="file" name="file"
                                class="form-control-file @error('file') is-invalid @enderror"
                                required>
@@ -46,7 +46,7 @@
                 </div>
 
                 <button class="btn btn-primary">
-                    <i class="fas fa-save mr-1"></i> Save Document
+                    <i class="fas fa-save mr-1"></i> Enregistrer le document
                 </button>
             </form>
         </div>
@@ -58,8 +58,8 @@
         <thead>
             <tr>
                 <th>Type</th>
-                <th>Title</th>
-                <th>Added</th>
+                <th>Titre</th>
+                <th>Ajouté le</th>
                 <th class="text-right" style="width: 160px;">Actions</th>
             </tr>
         </thead>
@@ -77,7 +77,7 @@
                     <form action="{{ route('admin.documents.destroy', $doc) }}"
                           method="POST"
                           class="d-inline"
-                          onsubmit="return confirm('Delete this document?')">
+                          onsubmit="return confirm('Supprimer ce document ?')">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm btn-outline-danger">
@@ -88,7 +88,7 @@
             </tr>
         @empty
             <tr>
-                <td colspan="4" class="text-center text-muted py-3">No documents yet.</td>
+                <td colspan="4" class="text-center text-muted py-3">Aucun document pour le moment.</td>
             </tr>
         @endforelse
         </tbody>

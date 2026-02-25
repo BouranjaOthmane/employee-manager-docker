@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="mb-0"><i class="fas fa-money-bill-wave mr-1"></i> Salaries</h5>
+    <h5 class="mb-0"><i class="fas fa-money-bill-wave mr-1"></i> Salaires</h5>
     <button class="btn btn-primary" data-toggle="collapse" data-target="#createSalary">
-        <i class="fas fa-plus mr-1"></i> Add Salary
+        <i class="fas fa-plus mr-1"></i> Ajouter un salaire
     </button>
 </div>
 
@@ -13,18 +13,18 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-3">
-                        <label>Month</label>
+                        <label>Mois</label>
                         <input type="month"
                                name="month"
                                class="form-control @error('month') is-invalid @enderror"
                                value="{{ old('month', now()->format('Y-m')) }}"
                                required>
                         @error('month') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                        <small class="text-muted">We save as first day of month.</small>
+                        <small class="text-muted">Enregistré comme premier jour du mois.</small>
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label>Base salary</label>
+                        <label>Salaire de base</label>
                         <input type="number" step="0.01" min="0"
                                name="base_salary"
                                class="form-control @error('base_salary') is-invalid @enderror"
@@ -33,7 +33,7 @@
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label>Bonus</label>
+                        <label>Prime</label>
                         <input type="number" step="0.01" min="0"
                                name="bonus"
                                class="form-control @error('bonus') is-invalid @enderror"
@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label>Deduction</label>
+                        <label>Retenue</label>
                         <input type="number" step="0.01" min="0"
                                name="deduction"
                                class="form-control @error('deduction') is-invalid @enderror"
@@ -52,7 +52,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Note (optional)</label>
+                    <label>Note (optionnelle)</label>
                     <textarea name="note" rows="2"
                               class="form-control @error('note') is-invalid @enderror"
                               placeholder="Note...">{{ old('note') }}</textarea>
@@ -60,7 +60,7 @@
                 </div>
 
                 <button class="btn btn-primary">
-                    <i class="fas fa-save mr-1"></i> Save Salary
+                    <i class="fas fa-save mr-1"></i> Enregistrer le salaire
                 </button>
             </form>
         </div>
@@ -71,10 +71,10 @@
     <table class="table table-hover table-striped">
         <thead>
         <tr>
-            <th>Month</th>
+            <th>Mois</th>
             <th>Base</th>
-            <th>Bonus</th>
-            <th>Deduction</th>
+            <th>Prime</th>
+            <th>Retenue</th>
             <th>Net</th>
             <th>Note</th>
         </tr>
@@ -90,7 +90,11 @@
                 <td class="text-muted">{{ $sal->note ?? '—' }}</td>
             </tr>
         @empty
-            <tr><td colspan="6" class="text-center text-muted py-3">No salary records yet.</td></tr>
+            <tr>
+                <td colspan="6" class="text-center text-muted py-3">
+                    Aucun enregistrement de salaire pour le moment.
+                </td>
+            </tr>
         @endforelse
         </tbody>
     </table>

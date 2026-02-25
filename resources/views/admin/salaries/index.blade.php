@@ -19,10 +19,11 @@
         </x-adminlte-alert>
     @endif
 
-    {{-- Filters --}}
+
+    {{-- Filtres --}}
     <div class="card card-outline card-primary">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-filter mr-1"></i> Filters</h3>
+            <h3 class="card-title"><i class="fas fa-filter mr-1"></i> Filtres</h3>
         </div>
 
         <div class="card-body">
@@ -30,19 +31,20 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Month</label>
-                            <input type="month" name="month" class="form-control" value="{{ request('month', now()->format('Y-m')) }}">
-                            <small class="text-muted">Leave empty to show all months.</small>
+                            <label>Mois</label>
+                            <input type="month" name="month" class="form-control"
+                                value="{{ request('month', now()->format('Y-m')) }}">
+                            <small class="text-muted">Laisser vide pour afficher tous les mois.</small>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Employee</label>
+                            <label>Employé</label>
                             <select name="employee_id" class="form-control">
-                                <option value="">All employees</option>
-                                @foreach($employees as $emp)
-                                    <option value="{{ $emp->id }}" @selected((string)request('employee_id') === (string)$emp->id)>
+                                <option value="">Tous les employés</option>
+                                @foreach ($employees as $emp)
+                                    <option value="{{ $emp->id }}" @selected((string) request('employee_id') === (string) $emp->id)>
                                         {{ $emp->first_name }} {{ $emp->last_name }}
                                     </option>
                                 @endforeach
@@ -53,10 +55,10 @@
                     <div class="col-md-2 d-flex align-items-end">
                         <div class="form-group w-100">
                             <button class="btn btn-primary btn-block" type="submit">
-                                <i class="fas fa-check"></i> Apply
+                                <i class="fas fa-check"></i> Appliquer
                             </button>
                             <a href="{{ route('admin.salaries.index') }}" class="btn btn-outline-secondary btn-block mt-2">
-                                Reset
+                                Réinitialiser
                             </a>
                         </div>
                     </div>
@@ -65,14 +67,14 @@
         </div>
     </div>
 
-    {{-- Totals --}}
+    {{-- Totaux --}}
     <div class="row">
         <div class="col-md-3">
             <div class="info-box">
                 <span class="info-box-icon bg-info"><i class="fas fa-layer-group"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Records</span>
-                    <span class="info-box-number">{{ (int)($totals->records ?? 0) }}</span>
+                    <span class="info-box-text">Enregistrements</span>
+                    <span class="info-box-number">{{ (int) ($totals->records ?? 0) }}</span>
                 </div>
             </div>
         </div>
@@ -81,8 +83,8 @@
             <div class="info-box">
                 <span class="info-box-icon bg-secondary"><i class="fas fa-wallet"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Base Total</span>
-                    <span class="info-box-number">{{ number_format((float)($totals->base_total ?? 0), 2) }}</span>
+                    <span class="info-box-text">Total base</span>
+                    <span class="info-box-number">{{ number_format((float) ($totals->base_total ?? 0), 2) }}</span>
                 </div>
             </div>
         </div>
@@ -91,8 +93,8 @@
             <div class="info-box">
                 <span class="info-box-icon bg-warning"><i class="fas fa-plus-circle"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Bonus Total</span>
-                    <span class="info-box-number">{{ number_format((float)($totals->bonus_total ?? 0), 2) }}</span>
+                    <span class="info-box-text">Total primes</span>
+                    <span class="info-box-number">{{ number_format((float) ($totals->bonus_total ?? 0), 2) }}</span>
                 </div>
             </div>
         </div>
@@ -101,8 +103,8 @@
             <div class="info-box">
                 <span class="info-box-icon bg-success"><i class="fas fa-coins"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">Net Total</span>
-                    <span class="info-box-number">{{ number_format((float)($totals->net_total ?? 0), 2) }}</span>
+                    <span class="info-box-text">Total net</span>
+                    <span class="info-box-number">{{ number_format((float) ($totals->net_total ?? 0), 2) }}</span>
                 </div>
             </div>
         </div>
@@ -111,9 +113,9 @@
     {{-- Table --}}
     <div class="card card-outline card-secondary">
         <div class="card-header">
-            <h3 class="card-title"><i class="fas fa-money-bill-wave mr-1"></i> Salary Records</h3>
+            <h3 class="card-title"><i class="fas fa-money-bill-wave mr-1"></i> Enregistrements des salaires</h3>
             <div class="card-tools">
-                <span class="badge badge-info p-2">Total: {{ $salaries->total() }}</span>
+                <span class="badge badge-info p-2">Total : {{ $salaries->total() }}</span>
             </div>
         </div>
 
@@ -122,43 +124,44 @@
                 <table class="table table-hover table-striped mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th>Employee</th>
-                            <th>Month</th>
+                            <th>Employé</th>
+                            <th>Mois</th>
                             <th>Base</th>
-                            <th>Bonus</th>
-                            <th>Deduction</th>
+                            <th>Prime</th>
+                            <th>Retenue</th>
                             <th>Net</th>
                             <th>Note</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @forelse($salaries as $sal)
-                        <tr>
-                            <td>
-                                <a href="{{ route('admin.employees.show', $sal->employee_id) }}?tab=salaries">
-                                    {{ $sal->employee?->first_name }} {{ $sal->employee?->last_name }}
-                                </a>
-                            </td>
-                            <td>{{ $sal->month?->format('Y-m') }}</td>
-                            <td>{{ number_format((float)$sal->base_salary, 2) }}</td>
-                            <td>{{ number_format((float)$sal->bonus, 2) }}</td>
-                            <td>{{ number_format((float)$sal->deduction, 2) }}</td>
-                            <td><strong>{{ number_format((float)$sal->net_salary, 2) }}</strong></td>
-                            <td class="text-muted">{{ \Illuminate\Support\Str::limit($sal->note, 50) ?? '—' }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="text-center text-muted py-4">No salary records found.</td>
-                        </tr>
-                    @endforelse
+                        @forelse($salaries as $sal)
+                            <tr>
+                                <td>
+                                    <a href="{{ route('admin.employees.show', $sal->employee_id) }}?tab=salaries">
+                                        {{ $sal->employee?->first_name }} {{ $sal->employee?->last_name }}
+                                    </a>
+                                </td>
+                                <td>{{ $sal->month?->format('Y-m') }}</td>
+                                <td>{{ number_format((float) $sal->base_salary, 2) }}</td>
+                                <td>{{ number_format((float) $sal->bonus, 2) }}</td>
+                                <td>{{ number_format((float) $sal->deduction, 2) }}</td>
+                                <td><strong>{{ number_format((float) $sal->net_salary, 2) }}</strong></td>
+                                <td class="text-muted">{{ \Illuminate\Support\Str::limit($sal->note, 50) ?? '—' }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">Aucun enregistrement de salaire
+                                    trouvé.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="2" class="text-right">Totals (filtered)</th>
-                            <th>{{ number_format((float)($totals->base_total ?? 0), 2) }}</th>
-                            <th>{{ number_format((float)($totals->bonus_total ?? 0), 2) }}</th>
-                            <th>{{ number_format((float)($totals->deduction_total ?? 0), 2) }}</th>
-                            <th>{{ number_format((float)($totals->net_total ?? 0), 2) }}</th>
+                            <th colspan="2" class="text-right">Totaux (filtrés)</th>
+                            <th>{{ number_format((float) ($totals->base_total ?? 0), 2) }}</th>
+                            <th>{{ number_format((float) ($totals->bonus_total ?? 0), 2) }}</th>
+                            <th>{{ number_format((float) ($totals->deduction_total ?? 0), 2) }}</th>
+                            <th>{{ number_format((float) ($totals->net_total ?? 0), 2) }}</th>
                             <th></th>
                         </tr>
                     </tfoot>
@@ -166,7 +169,7 @@
             </div>
         </div>
 
-        @if($salaries->hasPages())
+        @if ($salaries->hasPages())
             <div class="card-footer">
                 {{ $salaries->links() }}
             </div>
