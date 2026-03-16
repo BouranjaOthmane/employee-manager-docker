@@ -12,6 +12,14 @@
         </div>
 
         <div class="d-flex" style="gap:8px;">
+            <a href="{{ route('admin.notifications.index') }}" class="btn btn-outline-danger position-relative">
+                <i class="fas fa-bell"></i>
+                @if (auth()->user()->unreadNotifications()->count() > 0)
+                    <span class="badge badge-danger position-absolute" style="top:-6px; right:-6px;">
+                        {{ auth()->user()->unreadNotifications()->count() }}
+                    </span>
+                @endif
+            </a>
             <a href="{{ route('admin.employees.index') }}" class="btn btn-primary">
                 <i class="fas fa-users mr-1"></i> Employees
             </a>
@@ -41,17 +49,19 @@
         </x-adminlte-alert>
     @endif
 
-    {{-- QUICK STATS (you can wire real numbers later) --}}
+
+
+    {{-- QUICK STATS (vous pouvez connecter les vrais chiffres plus tard) --}}
     <div class="row">
         <div class="col-lg-3 col-6">
             <div class="small-box bg-primary">
                 <div class="inner">
                     <h3>{{ $stats['employees'] ?? '—' }}</h3>
-                    <p>Employees</p>
+                    <p>Employés</p>
                 </div>
                 <div class="icon"><i class="fas fa-users"></i></div>
                 <a href="{{ route('admin.employees.index') }}" class="small-box-footer">
-                    View employees <i class="fas fa-arrow-circle-right"></i>
+                    Voir les employés <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -60,11 +70,11 @@
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{ $stats['positions'] ?? '—' }}</h3>
-                    <p>Positions</p>
+                    <p>Postes</p>
                 </div>
                 <div class="icon"><i class="fas fa-briefcase"></i></div>
                 <a href="{{ route('admin.positions.index') }}" class="small-box-footer">
-                    View positions <i class="fas fa-arrow-circle-right"></i>
+                    Voir les postes <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -73,11 +83,11 @@
             <div class="small-box bg-warning">
                 <div class="inner">
                     <h3>{{ $stats['vacations_pending'] ?? '—' }}</h3>
-                    <p>Pending vacations</p>
+                    <p>Congés en attente</p>
                 </div>
                 <div class="icon"><i class="fas fa-plane-departure"></i></div>
                 <a href="{{ route('admin.vacations.index', ['status' => 'pending']) }}" class="small-box-footer">
-                    Review requests <i class="fas fa-arrow-circle-right"></i>
+                    Examiner les demandes <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -86,11 +96,11 @@
             <div class="small-box bg-success">
                 <div class="inner">
                     <h3>{{ $stats['payroll_net_this_month'] ?? '—' }}</h3>
-                    <p>Net payroll (this month)</p>
+                    <p>Paie nette (ce mois)</p>
                 </div>
                 <div class="icon"><i class="fas fa-money-bill-wave"></i></div>
                 <a href="{{ route('admin.salaries.index', ['month' => now()->format('Y-m')]) }}" class="small-box-footer">
-                    View payroll <i class="fas fa-arrow-circle-right"></i>
+                    Voir la paie <i class="fas fa-arrow-circle-right"></i>
                 </a>
             </div>
         </div>
@@ -103,7 +113,7 @@
             <div class="card card-outline card-warning">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-bell mr-1"></i> Pending vacation requests
+                        <i class="fas fa-bell mr-1"></i> Demandes de congé en attente
                     </h3>
                     <div class="card-tools">
                         <a href="{{ route('admin.vacations.index', ['status' => 'pending']) }}" class="btn btn-tool">
@@ -117,10 +127,10 @@
                         <table class="table table-hover table-striped mb-0">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>Employee</th>
+                                    <th>Employé</th>
                                     <th>Dates</th>
                                     <th>Type</th>
-                                    <th>Reason</th>
+                                    <th>Motif</th>
                                     <th class="text-right" style="width: 190px;">Actions</th>
                                 </tr>
                             </thead>
@@ -142,36 +152,37 @@
                                         <td class="text-muted">
                                             {{ \Illuminate\Support\Str::limit($vac->reason, 40) ?? '—' }}</td>
                                         <td class="text-right">
-                                            
-                                                @if ($vac->status === 'pending')
-                                                    <form method="POST" action="{{ route('admin.vacations.approve', $vac) }}"
-                                                        class="d-inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button class="btn btn-sm btn-success">
-                                                            <i class="fas fa-check"></i>
-                                                        </button>
-                                                    </form>
 
-                                                    <form method="POST" action="{{ route('admin.vacations.reject', $vac) }}"
-                                                        class="d-inline">
-                                                        @csrf
-                                                        @method('PATCH')
-                                                        <button class="btn btn-sm btn-danger">
-                                                            <i class="fas fa-times"></i>
-                                                        </button>
-                                                    </form>
-                                                @else
-                                                    <span class="text-muted">—</span>
-                                                @endif
+                                            @if ($vac->status === 'pending')
+                                                <form method="POST" action="{{ route('admin.vacations.approve', $vac) }}"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button class="btn btn-sm btn-success">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </form>
 
-                                                
-                                                
+                                                <form method="POST" action="{{ route('admin.vacations.reject', $vac) }}"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <button class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <span class="text-muted">—</span>
+                                            @endif
+
+
+
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted py-4">No pending requests ✅</td>
+                                        <td colspan="5" class="text-center text-muted py-4">Aucune demande en attente ✅
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -180,7 +191,8 @@
                 </div>
 
                 <div class="card-footer text-muted">
-                    Tip: Pending requests appear here so HR/Admin can approve fast.
+                    Astuce : Les demandes en attente apparaissent ici pour permettre au service RH/Admin de les approuver
+                    rapidement.
                 </div>
             </div>
         </div>
@@ -190,7 +202,7 @@
             <div class="card card-outline card-info">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-calendar-day mr-1"></i> Upcoming holidays
+                        <i class="fas fa-calendar-day mr-1"></i> Prochains jours fériés
                     </h3>
                     <div class="card-tools">
                         <a href="{{ route('admin.holidays.index') }}" class="btn btn-tool">
@@ -210,14 +222,14 @@
                                 <span class="badge badge-info p-2">{{ $h->date?->format('Y-m-d') }}</span>
                             </li>
                         @empty
-                            <li class="list-group-item text-center text-muted py-4">No upcoming holidays</li>
+                            <li class="list-group-item text-center text-muted py-4">Aucun jour férié à venir</li>
                         @endforelse
                     </ul>
                 </div>
 
                 <div class="card-footer">
                     <a href="{{ route('admin.holidays.create') }}" class="btn btn-info btn-block">
-                        <i class="fas fa-plus mr-1"></i> Add Holiday
+                        <i class="fas fa-plus mr-1"></i> Ajouter un jour férié
                     </a>
                 </div>
             </div>
@@ -225,27 +237,27 @@
             <div class="card card-outline card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">
-                        <i class="fas fa-bolt mr-1"></i> Quick actions
+                        <i class="fas fa-bolt mr-1"></i> Actions rapides
                     </h3>
                 </div>
 
                 <div class="card-body">
                     <div class="d-flex flex-column" style="gap:10px;">
                         <a href="{{ route('admin.employees.create') }}" class="btn btn-outline-primary">
-                            <i class="fas fa-user-plus mr-1"></i> Add Employee
+                            <i class="fas fa-user-plus mr-1"></i> Ajouter un employé
                         </a>
 
                         <a href="{{ route('admin.positions.create') }}" class="btn btn-outline-info">
-                            <i class="fas fa-briefcase mr-1"></i> Add Position
+                            <i class="fas fa-briefcase mr-1"></i> Ajouter un poste
                         </a>
 
                         <a href="{{ route('admin.salaries.index', ['month' => now()->format('Y-m')]) }}"
                             class="btn btn-outline-success">
-                            <i class="fas fa-receipt mr-1"></i> Payroll this month
+                            <i class="fas fa-receipt mr-1"></i> Paie de ce mois
                         </a>
 
                         <a href="{{ route('admin.vacations.index') }}" class="btn btn-outline-warning">
-                            <i class="fas fa-plane mr-1"></i> All vacation requests
+                            <i class="fas fa-plane mr-1"></i> Toutes les demandes de congé
                         </a>
                     </div>
                 </div>
@@ -257,7 +269,7 @@
     <div class="card card-outline card-success">
         <div class="card-header">
             <h3 class="card-title">
-                <i class="fas fa-clock mr-1"></i> Latest salary records
+                <i class="fas fa-clock mr-1"></i> Derniers enregistrements de salaires
             </h3>
             <div class="card-tools">
                 <a href="{{ route('admin.salaries.index') }}" class="btn btn-tool">
@@ -271,8 +283,8 @@
                 <table class="table table-hover table-striped mb-0">
                     <thead class="thead-light">
                         <tr>
-                            <th>Employee</th>
-                            <th>Month</th>
+                            <th>Employé</th>
+                            <th>Mois</th>
                             <th>Net</th>
                             <th>Note</th>
                         </tr>
@@ -291,7 +303,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center text-muted py-4">No salary records yet.</td>
+                                <td colspan="4" class="text-center text-muted py-4">Aucun enregistrement de salaire
+                                    pour le moment.</td>
                             </tr>
                         @endforelse
                     </tbody>

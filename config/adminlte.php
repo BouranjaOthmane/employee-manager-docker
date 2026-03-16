@@ -321,34 +321,107 @@ return [
             'can' => 'manage-blog',
         ],
         [
+            'text'  => 'Dashboard',
+            'route' => 'dashboard',
+            'icon'  => 'fas fa-tachometer-alt',
+            'can'   => 'is-admin-or-hr',
+        ],
+        [
             'text'  => 'Employés',
             'route' => 'admin.employees.index',
             'icon'  => 'fas fa-users',
+            'can'   => 'is-admin-or-hr',
         ],
 
         [
             'text'  => 'Postes',
             'route' => 'admin.positions.index',
             'icon'  => 'fas fa-briefcase',
+            'can'   => 'is-admin-or-hr',
         ],
 
         [
             'text'  => 'Congés',
             'route' => 'admin.vacations.index',
             'icon'  => 'fas fa-plane-departure',
+            'can'   => 'is-admin-or-hr',
         ],
 
         [
             'text'  => 'Salaires',
             'route' => 'admin.salaries.index',
             'icon'  => 'fas fa-money-bill-wave',
+            'can'   => 'is-admin-or-hr',
         ],
 
         [
             'text'  => 'Jours fériés',
             'route' => 'admin.holidays.index',
             'icon'  => 'fas fa-calendar-day',
+            'can'   => 'is-admin-or-hr',
         ],
+        [
+            'text'  => 'Notifications',
+            'route' => 'admin.notifications.index',
+            'icon'  => 'fas fa-bell',
+            'can'   => 'is-admin-or-hr',
+        ],
+
+        ////////////////////////////////////////
+
+        [
+            'header' => 'ESPACE EMPLOYÉ',
+            'can'    => 'is-employee',
+        ],
+
+        [
+            'text'  => 'Mon Dashboard',
+            'route' => 'employee.dashboard',
+            'icon'  => 'fas fa-tachometer-alt',
+            'can'   => 'is-employee',
+        ],
+
+        [
+            'text'  => 'Mon profil',
+            'route' => 'employee.profile',
+            'icon'  => 'fas fa-user',
+            'can'   => 'is-employee',
+        ],
+
+        [
+            'text'  => 'Mes congés',
+            'route' => 'employee.vacations.index',
+            'icon'  => 'fas fa-plane-departure',
+            'can'   => 'is-employee',
+        ],
+
+        [
+            'text'  => 'Mes salaires',
+            'route' => 'employee.salaries.index',
+            'icon'  => 'fas fa-money-bill-wave',
+            'can'   => 'is-employee',
+        ],
+
+        [
+            'text'  => 'Mon calendrier',
+            'route' => 'employee.calendar.show',
+            'icon'  => 'fas fa-calendar-alt',
+            'can'   => 'is-employee',
+        ],
+        [
+            'text'  => 'My Documents',
+            'route' => 'employee.documents.index',
+            'icon'  => 'fas fa-folder-open',
+            'can'   => 'is-employee',
+        ],
+        [
+            'text'  => 'My Notifications',
+            'route' => 'employee.notifications.index',
+            'icon'  => 'fas fa-bell',
+            'can'   => 'is-employee',
+        ],
+
+
 
     ],
 

@@ -22,8 +22,8 @@ class EmployeeDocumentController extends Controller
     {
         $data = $request->validate([
             'type' => ['required', 'string', 'max:50'],
-            'title' => ['nullable', 'string', 'max:190'],
-            'file' => ['required', 'file', 'max:5120', 'mimes:pdf,jpg,jpeg,png'],
+            'title' => ['nullable', 'string', 'max:190'], 
+            'file' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:20480'], // 20MB (in KB)
         ]);
 
         $path = $request->file('file')->store("employee-docs/{$employee->id}", 'public');

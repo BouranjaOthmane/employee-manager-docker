@@ -29,7 +29,22 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        $user = Auth::user();
+
+        if ($user->hasRole('admin') || $user->hasRole('hr')) {
+            return redirect()->route('dashboard');
+        }
+
+        if ($user->hasRole('employee')) {
+            return redirect()->route('employee.dashboard');
+        }
+
+        Auth::logout();
+
+        return redirect()->route('login')
+            ->withErrors([
+                'email' => 'No role is assigned to this account.',
+            ]);
     }
 
     /**

@@ -118,3 +118,45 @@
         </div>
     </div>
 </div>
+
+<hr>
+<h5 class="mb-3">Employee Login Access</h5>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Login Email</label>
+            <input type="email"
+                   name="login_email"
+                   class="form-control @error('login_email') is-invalid @enderror"
+                   value="{{ old('login_email', $employee->user->email ?? '') }}"
+                   placeholder="employee@example.com">
+            @error('login_email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password"
+                   name="password"
+                   class="form-control @error('password') is-invalid @enderror"
+                   placeholder="********">
+            @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password"
+                   name="password_confirmation"
+                   class="form-control"
+                   placeholder="********">
+        </div>
+    </div>
+</div>
+
+<small class="text-muted d-block mb-3">
+    Fill these fields only if you want to create login access for this employee.
+</small>

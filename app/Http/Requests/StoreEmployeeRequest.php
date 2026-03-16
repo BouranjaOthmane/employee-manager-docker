@@ -36,6 +36,10 @@ class StoreEmployeeRequest extends FormRequest
             'hire_date' => ['nullable', 'date'],
 
             'status' => ['required', Rule::in(['active', 'inactive'])],
+
+            // login account
+            'login_email' => ['nullable', 'email', 'max:190', 'unique:users,email'],
+            'password' => ['nullable', 'confirmed', 'min:8'],
         ];
     }
 
@@ -49,8 +53,9 @@ class StoreEmployeeRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // small cleanup (optional)
-        $this->merge([
-            'email' => $this->email ? strtolower(trim($this->email)) : null,
-        ]);
+       $this->merge([
+        'email' => $this->email ? strtolower(trim($this->email)) : null,
+        'login_email' => $this->login_email ? strtolower(trim($this->login_email)) : null,
+    ]);
     }
 }

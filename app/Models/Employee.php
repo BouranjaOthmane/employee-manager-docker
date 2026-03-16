@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 
 use App\Models\EmployeeDocument;
@@ -53,5 +54,9 @@ class Employee extends Model
     public function salaries(): HasMany
     {
         return $this->hasMany(Salary::class);
+    }
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class);
     }
 }

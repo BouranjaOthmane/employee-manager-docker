@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Employee;
 use App\Models\Position;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -57,12 +60,38 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreEmployeeRequest $request)
+    public function store(StoreEmployeeRequest $request): RedirectResponse
     {
-        $employee = Employee::create($request->validated());
+        $data = $request->validated();
+
+        DB::transaction(function () use ($data) {
+            $employee = Employee::create([
+                'position_id' => $data['position_id'] ?? null,
+                'first_name'  => $data['first_name'],
+                'last_name'   => $data['last_name'],
+                'email'       => $data['email'] ?? null,
+                'phone'       => $data['phone'] ?? null,
+                'cin'         => $data['cin'] ?? null,
+                'cnss'        => $data['cnss'] ?? null,
+                'hire_date'   => $data['hire_date'] ?? null,
+                'status'      => $data['status'],
+            ]);
+
+            // Create login account only if login email + password are provided
+            if (!empty($data['login_email']) && !empty($data['password'])) {
+                $user = User::create([
+                    'name' => $employee->first_name . ' ' . $employee->last_name,
+                    'email' => $data['login_email'],
+                    'password' => Hash::make($data['password']),
+                    'employee_id' => $employee->id,
+                ]);
+
+                $user->assignRole('employee');
+            }
+        });
 
         return redirect()
-            ->route('admin.employees.show', $employee)
+            ->route('admin.employees.index')
             ->with('success', 'Employee created successfully.');
     }
 
@@ -73,10 +102,10 @@ class EmployeeController extends Controller
     {
         $employee->load([
             'position:id,title',
-            'documents' => fn ($q) => $q->latest(),
-            'vacations' => fn ($q) => $q->latest(),
-            'salaries'  => fn ($q) => $q->orderByDesc('month'),
-            'vacations' => fn ($q) => $q->latest()->with('approvedBy:id,name'),
+            'documents' => fn($q) => $q->latest(),
+            'vacations' => fn($q) => $q->latest(),
+            'salaries'  => fn($q) => $q->orderByDesc('month'),
+            'vacations' => fn($q) => $q->latest()->with('approvedBy:id,name'),
         ]);
 
         return view('admin.employees.show', compact('employee'));

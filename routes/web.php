@@ -1,15 +1,24 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminNotificationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmployeeCalendarController;
 use App\Http\Controllers\Admin\EmployeeCalendarDayController;
 use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\EmployeeDocumentController;
+use App\Http\Controllers\Admin\EmployeePasswordController;
 use App\Http\Controllers\Admin\EmployeeSalaryController;
 use App\Http\Controllers\Admin\EmployeeVacationController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\VacationApprovalController;
 use App\Http\Controllers\Admin\VacationController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Employee\CalendarEmployeeController;
+use App\Http\Controllers\Employee\DocumentEmployeeController;
+use App\Http\Controllers\Employee\EmployeeDashboardController;
+use App\Http\Controllers\Employee\EmployeeNotificationController;
+use App\Http\Controllers\Employee\ProfileController;
+use App\Http\Controllers\Employee\SalaryEmployeeController;
+use App\Http\Controllers\Employee\VacationEmployeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,7 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'role:admin|hr'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('employees', \App\Http\Controllers\Admin\EmployeeController::class);
     Route::resource('positions', \App\Http\Controllers\Admin\PositionController::class);
     Route::resource('vacations', \App\Http\Controllers\Admin\VacationController::class);
@@ -81,14 +90,53 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Approve / Reject (protected)
     Route::patch('vacations/{vacation}/approve', [VacationApprovalController::class, 'approve'])
         ->name('vacations.approve');
-        // ->middleware('role:admin|hr');
+    // ->middleware('role:admin|hr');
 
     Route::patch('vacations/{vacation}/reject', [VacationApprovalController::class, 'reject'])
         ->name('vacations.reject');
-        // ->middleware('role:admin|hr');
+    // ->middleware('role:admin|hr');
 
     Route::get('salaries', [SalaryController::class, 'index'])->name('salaries.index');
+
+    Route::post('employees/{employee}/reset-password', [EmployeePasswordController::class, 'reset'])
+    ->name('employees.reset-password');
+
+
+    Route::get('notifications', [AdminNotificationController::class, 'index'])
+    ->name('notifications.index');
+
+Route::post('notifications/{id}/read', [AdminNotificationController::class, 'markAsRead'])
+    ->name('notifications.read');
+
+Route::post('notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])
+    ->name('notifications.readAll');
 });
+
+
+
+
+Route::middleware(['auth', 'role:employee'])
+    ->prefix('employee')
+    ->name('employee.')
+    ->group(function () {
+        Route::get('dashboard', [EmployeeDashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('profile', [ProfileController::class, 'show'])->name('profile');
+
+        Route::get('vacations', [VacationEmployeeController::class, 'index'])->name('vacations.index');
+        Route::post('vacations', [VacationEmployeeController::class, 'store'])->name('vacations.store');
+
+        Route::get('salaries', [SalaryEmployeeController::class, 'index'])->name('salaries.index');
+
+        Route::get('documents', [DocumentEmployeeController::class, 'index'])->name('documents.index');
+        Route::get('documents/{document}/download', [DocumentEmployeeController::class, 'download'])->name('documents.download');
+
+        Route::get('calendar', [CalendarEmployeeController::class, 'show'])->name('calendar.show');
+
+        Route::get('/notifications', [EmployeeNotificationController::class, 'index'])->name('notifications.index');
+Route::post('/notifications/{id}/read', [EmployeeNotificationController::class, 'markAsRead'])->name('notifications.read');
+Route::post('/notifications/read-all', [EmployeeNotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
+    });
 
 
 require __DIR__ . '/auth.php';
