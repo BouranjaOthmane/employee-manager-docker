@@ -29,6 +29,11 @@
            href="{{ route('admin.employees.show', $employee) }}?tab=overview">
             <i class="fas fa-user mr-1"></i> Profil
         </a>
+
+        <a class="btn btn-success"
+   href="{{ route('admin.employees.calendar.export', ['employee' => $employee->id, 'month' => $current->format('Y-m')]) }}">
+    <i class="fas fa-file-excel mr-1"></i> Export Excel
+</a>
     </div>
 </div>
 @endsection

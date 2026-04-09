@@ -32,6 +32,10 @@
             <a href="{{ route('admin.holidays.index') }}" class="btn btn-outline-info">
                 <i class="fas fa-calendar-day mr-1"></i> Holidays
             </a>
+            <a class="btn btn-success"
+                href="{{ route('admin.calendar.export-all', ['month' => request('month', now()->format('Y-m'))]) }}">
+                <i class="fas fa-file-excel mr-1"></i> Exporter tous les employés
+            </a>
         </div>
     </div>
 @endsection
@@ -195,6 +199,29 @@
                     rapidement.
                 </div>
             </div>
+
+            <div class="card card-outline card-success mb-3">
+    <div class="card-body">
+        <form method="GET" action="{{ route('admin.calendar.export-all') }}" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="month" class="form-label">Mois à extraire</label>
+                <input
+                    type="month"
+                    id="month"
+                    name="month"
+                    class="form-control"
+                    value="{{ request('month', now()->format('Y-m')) }}"
+                >
+            </div>
+
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="fas fa-file-excel mr-1"></i> Exporter tous les employés
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
         </div>
 
         {{-- RIGHT: Holidays + Quick links --}}

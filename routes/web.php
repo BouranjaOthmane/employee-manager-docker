@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminNotificationController;
+use App\Http\Controllers\Admin\CalendarExportController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EmployeeCalendarController;
 use App\Http\Controllers\Admin\EmployeeCalendarDayController;
@@ -83,6 +84,13 @@ Route::middleware(['auth', 'role:admin|hr'])->prefix('admin')->name('admin.')->g
     Route::delete('employees/{employee}/calendar/day', [EmployeeCalendarDayController::class, 'destroy'])
         ->name('employees.calendar.day.destroy');
 
+    Route::get('calendar/export-all', [CalendarExportController::class, 'exportAll'])
+    ->name('calendar.export-all');
+
+
+    Route::get('employees/{employee}/calendar/export', [EmployeeCalendarController::class, 'export'])
+        ->name('employees.calendar.export');
+
 
     Route::get('vacations', [VacationController::class, 'index'])
         ->name('vacations.index');
@@ -99,17 +107,17 @@ Route::middleware(['auth', 'role:admin|hr'])->prefix('admin')->name('admin.')->g
     Route::get('salaries', [SalaryController::class, 'index'])->name('salaries.index');
 
     Route::post('employees/{employee}/reset-password', [EmployeePasswordController::class, 'reset'])
-    ->name('employees.reset-password');
+        ->name('employees.reset-password');
 
 
     Route::get('notifications', [AdminNotificationController::class, 'index'])
-    ->name('notifications.index');
+        ->name('notifications.index');
 
-Route::post('notifications/{id}/read', [AdminNotificationController::class, 'markAsRead'])
-    ->name('notifications.read');
+    Route::post('notifications/{id}/read', [AdminNotificationController::class, 'markAsRead'])
+        ->name('notifications.read');
 
-Route::post('notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])
-    ->name('notifications.readAll');
+    Route::post('notifications/read-all', [AdminNotificationController::class, 'markAllAsRead'])
+        ->name('notifications.readAll');
 });
 
 
@@ -134,8 +142,8 @@ Route::middleware(['auth', 'role:employee'])
         Route::get('calendar', [CalendarEmployeeController::class, 'show'])->name('calendar.show');
 
         Route::get('/notifications', [EmployeeNotificationController::class, 'index'])->name('notifications.index');
-Route::post('/notifications/{id}/read', [EmployeeNotificationController::class, 'markAsRead'])->name('notifications.read');
-Route::post('/notifications/read-all', [EmployeeNotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
+        Route::post('/notifications/{id}/read', [EmployeeNotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::post('/notifications/read-all', [EmployeeNotificationController::class, 'markAllAsRead'])->name('notifications.readAll');
     });
 
 
